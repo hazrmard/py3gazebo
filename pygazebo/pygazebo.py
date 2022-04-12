@@ -13,11 +13,19 @@ import sys
 import time
 
 # from . import msg
-from .msg import gz_string_pb2
-from .msg import gz_string_v_pb2
-from .msg import packet_pb2
-from .msg import publishers_pb2
-from .msg import subscribe_pb2
+# from .msg import gz_string_pb2
+# from .msg import gz_string_v_pb2
+# from .msg import packet_pb2
+# from .msg import publishers_pb2
+# from .msg import subscribe_pb2
+
+from .msg import (
+    gz_string_pb2,
+    gz_string_v_pb2,
+    packet_pb2,
+    publishers_pb2,
+    subscribe_pb2
+)
 
 logger = logging.getLogger(__name__)
 
