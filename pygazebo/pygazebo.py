@@ -12,7 +12,7 @@ import socket
 import sys
 import time
 
-from . import msg
+# from . import msg
 from .msg import gz_string_pb2
 from .msg import gz_string_v_pb2
 from .msg import packet_pb2
