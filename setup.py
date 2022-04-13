@@ -5,7 +5,7 @@ import os
 import sys
 
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 if sys.argv[-1] == 'publish':
@@ -33,16 +33,17 @@ if sys.hexversion < 0x03040000:
 
 setup(
     name='pygazebo',
-    version='3.0.1-gz8',
+    version='3.0.2',
     description='Python bindings for the Gazebo multi-robot simulator.',
     long_description=readme + '\n\n' + history,
     author='Josh Pieper',
     author_email='jjp@pobox.com',
     url='https://github.com/jpieper/pygazebo',
-    packages=[
-        'pygazebo',
-        'pygazebo.msg',
-    ],
+    # packages=[
+    #     'pygazebo',
+    #     'pygazebo.msg'
+    # ],
+    packages=find_packages('.'),
     package_dir={'pygazebo': 'pygazebo'},
     include_package_data=True,
     install_requires=install_requires,

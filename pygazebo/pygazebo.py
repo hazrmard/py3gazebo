@@ -12,20 +12,12 @@ import socket
 import sys
 import time
 
-# from . import msg
-# from .msg import gz_string_pb2
-# from .msg import gz_string_v_pb2
-# from .msg import packet_pb2
-# from .msg import publishers_pb2
-# from .msg import subscribe_pb2
-
-from .msg import (
-    gz_string_pb2,
-    gz_string_v_pb2,
-    packet_pb2,
-    publishers_pb2,
-    subscribe_pb2
-)
+from .msg import v11 as msg
+from .msg.v11 import gz_string_pb2
+from .msg.v11 import gz_string_v_pb2
+from .msg.v11 import packet_pb2
+from .msg.v11 import publishers_pb2
+from .msg.v11 import subscribe_pb2
 
 logger = logging.getLogger(__name__)
 
@@ -258,7 +250,7 @@ class _Connection(object):
         # separate DNS resolution stage.
         # Error in py 3.9, async is a reserved keyword
         # fix: https://stackoverflow.com/questions/51196568/create-task-asyncio-async-syntaxerror-invalid-syntax
-        future = getattr(asyncio, 'async')(loop.sock_connect(self.socket, address))
+        future = asyncio.ensure_future(loop.sock_connect(self.socket, address))
 
         def callback_impl(future):
             try:
@@ -287,7 +279,7 @@ class _Connection(object):
 
     def start_accept(self, callback):
         loop = asyncio.get_event_loop()
-        future = getattr(asyncio, 'async')(loop.sock_accept(self.socket))
+        future = asyncio.ensure_future(loop.sock_accept(self.socket))
         future.add_done_callback(
             lambda future: self.handle_accept(callback, future))
 
@@ -302,7 +294,7 @@ class _Connection(object):
         result = asyncio.Future()
 
         loop = asyncio.get_event_loop()
-        future = getattr(asyncio, 'async')(loop.sock_recv(self.socket, 8))
+        future = asyncio.ensure_future(loop.sock_recv(self.socket, 8))
         future.add_done_callback(
             lambda future: self.handle_read_raw_header(future, result))
         return result
@@ -334,7 +326,7 @@ class _Connection(object):
                 return
 
             loop = asyncio.get_event_loop()
-            future = getattr(asyncio, 'async')(
+            future = asyncio.ensure_future(
                 loop.sock_recv(self.socket,
                                min(total_size - len(starting_data),
                                    self.BUF_SIZE)))
@@ -394,7 +386,7 @@ class _Connection(object):
             next_send = data[to_send:]
 
             loop = asyncio.get_event_loop()
-            future = getattr(asyncio, 'async')(loop.sock_sendall(self.socket, this_send))
+            future = asyncio.ensure_future(loop.sock_sendall(self.socket, this_send))
             future.add_done_callback(
                 lambda future: self.send_pieces(next_send, result))
         except Exception as e:
